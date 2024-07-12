@@ -167,7 +167,7 @@ def grafico(dicionario, topic):
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot(pyplot.gcf())
     
-api_key = "AIzaSyDZFNSxQLJMPVrD47AlE780I1_Y6r0DOpA"
+api_key = "AIzaSyDHXDizJeFPkxeZ1XrDWBi_QlgP1eocsHA"
     
 def buscar_videos(api_key, pesquisa):
     if 'videos' not in st.session_state:

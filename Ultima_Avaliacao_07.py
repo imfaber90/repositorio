@@ -12,17 +12,8 @@ from reportlab.lib.pagesizes import letter
 import pypdf
 import streamlit as st
 from googleapiclient.discovery import build
-import chromedriver_autoinstaller
+import requests
 
-chromedriver_autoinstaller.install()
-
-# Configurações do Selenium WebDriver
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument("--headless")
-chrome_options.add_argument("--disable-gpu")
-chrome_options.add_argument("--no-sandbox")
-chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_options.add_argument("user-agent=Mozilla/5.0")
 
 # Função para obter o texto e a imagem baseado no curso
 def text_img_main(curso):
@@ -86,11 +77,10 @@ textinho_adv = """
 
 # Carregando dados do Selenium (executado uma vez)
 if 'dicionario' not in st.session_state:
-    service = Service(ChromeDriverManager().install())
-    driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.get("https://vestibulares.estrategia.com/portal/enem-e-vestibulares/enem/assuntos-que-mais-caem-no-enem/")
-    html = driver.page_source
-    soup = BeautifulSoup(html, 'html.parser')
+    
+    url = "https://vestibulares.estrategia.com/portal/enem-e-vestibulares/enem/assuntos-que-mais-caem-no-enem/"
+    html = requests.get(url)
+    soup = BeautifulSoup(html.content, 'html.parser')
 
     # Processar os dados do HTML
     uls = soup.find_all('ul')
@@ -287,7 +277,8 @@ with tab6:
     if gerar:
         pdf_buffer = gerar_pdf(st.session_state.dicionario)
         download_pdf(pdf_buffer)
-    try:    
+    try:  
+        pass  
         pesquisa_video(st.session_state.dicionario)
     except:
         st.write("Excedeu o uso da API Key pro Youtube (trocar Key)")

@@ -172,7 +172,7 @@ def grafico(dicionario, topic):
                shadow=True, explode=explode, autopct='%1.1f%%')
     pyplot.title(f'Principais tópicos de {topic}')
     st.set_option('deprecation.showPyplotGlobalUse', False)
-    st.pyplot()
+    st.pyplot(pyplot.gcf())
     
 api_key = "AIzaSyCh205fNj_sAKt3Eysfy-1D4q4B8iyA6v4"
     

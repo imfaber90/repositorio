@@ -12,6 +12,9 @@ from reportlab.lib.pagesizes import letter
 import pypdf
 import streamlit as st
 from googleapiclient.discovery import build
+import chromedriver_autoinstaller
+
+chromedriver_autoinstaller.install()
 
 # Configurações do Selenium WebDriver
 chrome_options = webdriver.ChromeOptions()
@@ -126,19 +129,21 @@ def gerar_pdf(dicionario):
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=letter)
     c.setFont("Helvetica", 12)
-    
+
     y = 750
     for categoria, materias in dicionario.items():
-        c.drawString(30, y, f"Categoria: {categoria}")
-        y -= 20
+        c.drawString(30, y, f"{categoria}")
+        y -= 30  # Espaço adicional após o título da categoria
         for materia_dict in materias:
             for materia, porcentagem in materia_dict.items():
-                c.drawString(50, y, f"Matéria: {materia} - Porcentagem: {porcentagem}%")
+                c.drawString(50, y, f"{materia} - {porcentagem}%")
                 y -= 20
                 if y < 50:
                     c.showPage()
                     y = 750
                     c.setFont("Helvetica", 12)
+
+        y -= 20  # Espaço adicional entre categorias
     
     c.save()
     buffer.seek(0)
@@ -282,7 +287,9 @@ with tab6:
     if gerar:
         pdf_buffer = gerar_pdf(st.session_state.dicionario)
         download_pdf(pdf_buffer)
-        
-    pesquisa_video(st.session_state.dicionario)
+    try:    
+        pesquisa_video(st.session_state.dicionario)
+    except:
+        st.write("Excedeu o uso da API Key pro Youtube (trocar Key)")
 
 

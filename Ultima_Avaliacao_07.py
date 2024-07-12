@@ -177,20 +177,23 @@ def grafico(dicionario, topic):
 api_key = "AIzaSyCh205fNj_sAKt3Eysfy-1D4q4B8iyA6v4"
     
 def buscar_videos(api_key, pesquisa):
+    if 'videos' not in st.session_state:
+        st.session_state.videos = {}
+
+    if pesquisa in st.session_state.videos:
+        return st.session_state.videos[pesquisa]
+
     youtube = build('youtube', 'v3', developerKey=api_key)
-    
-    # Fazendo a requisição para a API do YouTube
     request = youtube.search().list(
         part="snippet",
         maxResults=1,
         q=pesquisa,
-        type="video"  # Garantindo que apenas vídeos sejam retornados
+        type="video"
     )
     response = request.execute()
     
     videos = []
     
-    # Extraindo informações dos vídeos
     for item in response['items']:
         video_info = {
             'title': item['snippet']['title'],
@@ -201,31 +204,28 @@ def buscar_videos(api_key, pesquisa):
         }
         videos.append(video_info)
     
+    # Store videos in session state
+    st.session_state.videos[pesquisa] = videos
     return videos
 
 
 # Chamando a função e mostrando os resultados no Streamlit
 def pesquisa_video(dicio):
-    #st.write(dicio)
-    materia = []
-    porcent = []
     for descricao, lista in dicio.items():
-        i = 0
         st.markdown(f'<strong>{descricao}<strong>', unsafe_allow_html=True)
-        for l in lista:
+        for i, l in enumerate(lista):
             if i == 3:
                 break
             for k in l:
-                st.write(k, l[k],"% de peso")
+                st.write(k, l[k], "% de peso")
                 pesquisa = k
                 videos = buscar_videos(api_key, pesquisa)
-            for idx, video in enumerate(videos):
-                st.subheader(f"Vídeo {idx+1}: {video['title']}")
-                st.image(video['thumbnail'])
-                st.write(f"Description: {video['description']}")
-                st.write(f"[Link para o vídeo]({video['url']})")
-                st.write("---")
-            i+=1    
+                for idx, video in enumerate(videos):
+                    st.subheader(f"Vídeo {idx+1}: {video['title']}")
+                    st.image(video['thumbnail'])
+                    st.write(f"Description: {video['description']}")
+                    st.write(f"[Link para o vídeo]({video['url']})")
+                    st.write("---")
     
     
 # Página inicial

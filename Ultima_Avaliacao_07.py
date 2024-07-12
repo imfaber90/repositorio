@@ -219,7 +219,7 @@ def pesquisa_video(dicio):
                     st.write("---")
     
     
-st.title("Matérias mais recorrentes no Enem")
+st.title("Matérias recorrentes no Enem")
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Cursos", "Linguagens", "Humanas", "Naturezas", "Matemática","Features"])
 
 with tab1:

@@ -8,4 +8,4 @@ matplotlib
 webdriver_manager
 reportlab
 pypdf
-chromedriver_autoinstaller
+requests

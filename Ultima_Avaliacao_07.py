@@ -15,7 +15,6 @@ from googleapiclient.discovery import build
 import requests
 
 
-# Função para obter o texto e a imagem baseado no curso
 def text_img_main(curso):
     if curso == 'Medicina':
         return textinho_med, imagem_med
@@ -26,13 +25,11 @@ def text_img_main(curso):
     elif curso == 'Advocacia':
         return textinho_adv, imagem_adv
 
-# Inicializando o estado da sessão
 if 'text_img_info' not in st.session_state:
     st.session_state.text_img_info = {'texto': '', 'img': ''}
 if 'curso' not in st.session_state:
     st.session_state.curso = "Medicina"  # Valor padrão
 
-# Definindo textos e imagens para cada curso
 textinho_med = """
 <h2><strong>Notas de corte de Medicina no Sisu</strong></h2>
 <p>+ <em><a href="https://www.guiadacarreira.com.br/blog/como-se-inscrever-no-sisu">Como se inscrever no Sisu? Garanta sua vaga na universidade pública</a></em></p>
@@ -75,14 +72,12 @@ textinho_adv = """
 </ul>
 """
 
-# Carregando dados do Selenium (executado uma vez)
 if 'dicionario' not in st.session_state:
     
     url = "https://vestibulares.estrategia.com/portal/enem-e-vestibulares/enem/assuntos-que-mais-caem-no-enem/"
     html = requests.get(url)
     soup = BeautifulSoup(html.content, 'html.parser')
 
-    # Processar os dados do HTML
     uls = soup.find_all('ul')
     h3s = soup.find_all('h3')
 
@@ -133,7 +128,7 @@ def gerar_pdf(dicionario):
                     y = 750
                     c.setFont("Helvetica", 12)
 
-        y -= 20  # Espaço adicional entre categorias
+        y -= 20 
     
     c.save()
     buffer.seek(0)
@@ -149,7 +144,6 @@ def download_pdf(buffer):
     )
 
 
-# Função para gerar gráficos
 def grafico(dicionario, topic):
     materia = []
     porcent = []
@@ -166,7 +160,6 @@ def grafico(dicionario, topic):
     
     explode = [0.1 if i == 1 else 0 for i in range(len(materia))]
 
-    # Criar o gráfico de pizza
     pyplot.figure(figsize=(11, 8))
     pyplot.pie(porcent, labels=materia, colors=colors, startangle=90,
                shadow=True, explode=explode, autopct='%1.1f%%')
@@ -174,7 +167,7 @@ def grafico(dicionario, topic):
     st.set_option('deprecation.showPyplotGlobalUse', False)
     st.pyplot(pyplot.gcf())
     
-api_key = "AIzaSyCh205fNj_sAKt3Eysfy-1D4q4B8iyA6v4"
+api_key = "AIzaSyDZFNSxQLJMPVrD47AlE780I1_Y6r0DOpA"
     
 def buscar_videos(api_key, pesquisa):
     if 'videos' not in st.session_state:
@@ -204,12 +197,10 @@ def buscar_videos(api_key, pesquisa):
         }
         videos.append(video_info)
     
-    # Store videos in session state
     st.session_state.videos[pesquisa] = videos
     return videos
 
 
-# Chamando a função e mostrando os resultados no Streamlit
 def pesquisa_video(dicio):
     for descricao, lista in dicio.items():
         st.markdown(f'<strong>{descricao}<strong>', unsafe_allow_html=True)
@@ -228,7 +219,6 @@ def pesquisa_video(dicio):
                     st.write("---")
     
     
-# Página inicial
 st.title("Matérias mais recorrentes no Enem")
 tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Cursos", "Linguagens", "Humanas", "Naturezas", "Matemática","Features"])
 
@@ -254,7 +244,6 @@ with tab1:
     with col4:
         st.image(st.session_state.text_img_info['img'], width=330)
 
-# Gráficos
 with tab2:
     grafico(st.session_state.dicionario, "Português")
 

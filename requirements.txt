@@ -1,0 +1,8 @@
+streamlit
+google-api-python-client
+beautifulsoup4
+selenium
+pandas
+numpy
+matplotlib
+webdriver_manager

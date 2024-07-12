@@ -6,3 +6,4 @@ pandas
 numpy
 matplotlib
 webdriver_manager
+reportlab

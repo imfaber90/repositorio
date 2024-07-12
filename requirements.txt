@@ -7,3 +7,4 @@ numpy
 matplotlib
 webdriver_manager
 reportlab
+pypdf
